@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EcoPulse | UK Carbon-Aware Workload Scheduler</title>
+    <!-- SEO Best Practices -->
+    <meta name="description" content="Check live UK regional grid carbon intensity, generation mix, and optimize energy-intensive workloads to minimize carbon emissions." />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Radial Mesh Gradient Backgrounds -->
+    <div class="bg-glow bg-glow-1" id="glow1"></div>
+    <div class="bg-glow bg-glow-2" id="glow2"></div>
+
+    <div class="app-container">
+      <header class="app-header">
+        <div class="brand">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h1 id="app-title">EcoPulse</h1>
+        </div>
+        <p class="subtitle">UK Carbon Intensity & Workload Scheduler</p>
+      </header>
+
+      <main class="dashboard-grid">
+        <!-- Section 1: Current Grid Intensity -->
+        <section class="card glassmorphic" id="intensity-card">
+          <div class="card-header">
+            <h2>Live Grid Intensity</h2>
+            <div class="postcode-lookup">
+              <form id="postcode-form">
+                <input type="text" id="postcode-input" placeholder="Postcode (e.g. EH1)" aria-label="UK outward postcode" maxlength="4" />
+                <button type="submit" id="search-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <div class="intensity-display-wrapper">
+            <div class="region-info">
+              <span id="region-badge">National Grid</span>
+            </div>
+            
+            <div class="intensity-value-container">
+              <div class="intensity-circle-outer">
+                <div class="intensity-circle-inner">
+                  <span id="intensity-value">--</span>
+                  <span class="intensity-unit">gCO₂/kWh</span>
+                </div>
+              </div>
+              <div class="intensity-status-container">
+                <span class="badge" id="intensity-level-badge">Loading...</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="generation-mix-section">
+            <h3>Generation Fuel Mix</h3>
+            <div id="generation-mix-list" class="fuel-mix-list">
+              <!-- Fuel items will be injected here dynamically -->
+              <p class="loading-text">Loading energy mix data...</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 2: Workload Scheduler -->
+        <section class="card glassmorphic" id="scheduler-card">
+          <div class="card-header">
+            <h2>Carbon-Aware Scheduler</h2>
+          </div>
+          <p class="card-description">
+            Specify the duration of your energy-intensive task (like ML training, CI/CD builds, or device charging) to find the absolute lowest carbon emissions window in the next 48 hours.
+          </p>
+
+          <form id="scheduler-form" class="scheduler-controls">
+            <div class="form-group">
+              <label for="duration-range">
+                Workload Duration: <span id="duration-display">2.0</span> hours
+              </label>
+              <input type="range" id="duration-range" min="0.5" max="24" step="0.5" value="2.0" class="slider" />
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="optimize-btn">
+              <span>Find Best Start Time</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </form>
+
+          <!-- Optimization Output -->
+          <div id="scheduler-results" class="results-container hidden">
+            <div class="savings-banner">
+              <div class="savings-percentage" id="savings-val">--%</div>
+              <div class="savings-label">Carbon Savings vs. Starting Now</div>
+            </div>
+
+            <div class="result-details">
+              <div class="detail-row">
+                <span class="label">Best Starting Time</span>
+                <span class="value highlight-text" id="best-start-val">--</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Workload End Time</span>
+                <span class="value" id="end-time-val">--</span>
+              </div>
+              <div class="detail-row">
+                <span class="label">Average Carbon Intensity</span>
+                <span class="value" id="avg-intensity-val">-- gCO₂/kWh</span>
+              </div>
+            </div>
+
+            <div class="timeline-container">
+              <h3>Optimization Insight</h3>
+              <p id="timeline-insight-text" class="insight-text"></p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="app-footer">
+        <p>EcoPulse is powered by the National Energy System Operator Carbon Intensity API. Environmentally conscious workloads help stabilize the grid and reduce global emissions.</p>
+      </footer>
+    </div>
+
+    <!-- Script loading -->
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

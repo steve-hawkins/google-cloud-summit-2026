@@ -1,0 +1,60 @@
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { CarbonIntensityService } from './services/carbonIntensity.js';
+import { SchedulerService } from './services/scheduler.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export function createApp() {
+  const app = express();
+  const intensityService = new CarbonIntensityService();
+  const schedulerService = new SchedulerService();
+
+  app.use(express.json());
+  
+  // Serve static frontend assets
+  app.use(express.static(path.join(__dirname, '../public')));
+
+  // API Endpoints
+  app.get('/api/intensity/current', async (req, res) => {
+    const postcode = req.query.postcode as string | undefined;
+
+    try {
+      if (postcode) {
+        const regionalData = await intensityService.getRegionalIntensity(postcode);
+        return res.json(regionalData);
+      } else {
+        const nationalData = await intensityService.getCurrentNationalIntensity();
+        return res.json(nationalData);
+      }
+    } catch (error: any) {
+      return res.status(400).json({ error: error.message || 'Failed to fetch current carbon intensity' });
+    }
+  });
+
+  app.get('/api/scheduler/optimize', async (req, res) => {
+    const durationStr = req.query.durationHours as string | undefined;
+
+    if (!durationStr) {
+      return res.status(400).json({ error: 'Missing durationHours query parameter' });
+    }
+
+    const durationHours = parseFloat(durationStr);
+
+    if (isNaN(durationHours) || durationHours <= 0) {
+      return res.status(400).json({ error: 'durationHours must be a valid positive number' });
+    }
+
+    try {
+      const forecast = await intensityService.getNationalForecast();
+      const optimalSchedule = schedulerService.findOptimalWindow(forecast, durationHours);
+      return res.json(optimalSchedule);
+    } catch (error: any) {
+      return res.status(400).json({ error: error.message || 'Failed to calculate optimal schedule' });
+    }
+  });
+
+  return app;
+}

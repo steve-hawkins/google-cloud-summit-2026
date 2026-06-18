@@ -1,0 +1,13 @@
+# Dependencies
+/node_modules
+/frontend/node_modules
+
+# Build outputs
+/dist
+/public
+/frontend/dist
+
+# IDE and System Files
+.DS_Store
+.vscode/
+*.log

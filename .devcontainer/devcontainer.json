@@ -1,0 +1,18 @@
+{
+  "name": "Carbon-Aware Workload Scheduler Workspace",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "vitest.explorer",
+        "ms-vscode.vscode-typescript-next"
+      ]
+    }
+  },
+  "postCreateCommand": "npm install"
+}
