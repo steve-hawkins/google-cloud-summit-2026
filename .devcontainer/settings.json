@@ -1,0 +1,26 @@
+{
+  "allowNonWorkspaceAccess": true,
+  "colorScheme": "solarized dark",
+  "enableTelemetry": false,
+  "permissions": {
+    "allow": [
+      "command(git log)",
+      "command(git status)",
+      "command(git diff)",
+      "command(gcloud --version)",
+      "command(uname)",
+      "command(cat)",
+      "command(whoami)",
+      "command(echo)",
+      "command(terraform)",
+      "command(gcloud config)",
+      "command(env)",
+      "command(grep)",
+      "command(npx)",
+      "command(npm test)",
+      "command(npm run)",
+      "command(git add)",
+      "command(git commit)"
+    ]
+  }
+}

@@ -1,5 +1,8 @@
 {
   "name": "Carbon-Aware Workload Scheduler Workspace",
+  "features": {
+    "ghcr.io/devcontainers/features/terraform:1": {}
+  },
   "customizations": {
     "vscode": {
       "settings": {
@@ -14,5 +17,5 @@
       ]
     }
   },
-  "postCreateCommand": "npm install"
+  "postCreateCommand": "./.devcontainer/setup.sh"
 }

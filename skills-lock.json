@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "skills": {
+    "agent-platform-endpoint-management": {
+      "source": "google/skills",
+      "sourceType": "github",
+      "skillPath": "skills/cloud/agent-platform-endpoint-management/SKILL.md",
+      "computedHash": "2072e2b424da0b648f49ada0b67c173e906e396de3f81f70ff06894b60b441d4"
+    },
+    "agent-platform-eval-flywheel": {
+      "source": "google/skills",
+      "sourceType": "github",
+      "skillPath": "skills/cloud/agent-platform-eval-flywheel/SKILL.md",
+      "computedHash": "bb2fcf0ee98a3f5d4d8c947ccda686867a80db69fa3a0904f77837972d60a041"
+    },
+    "agent-platform-inference": {
+      "source": "google/skills",
+      "sourceType": "github",
+      "skillPath": "skills/cloud/agent-platform-inference/SKILL.md",
+      "computedHash": "550174f149388351fd86afcac69e01f4d607c951749aa173f1ebc0b0be7ede02"
+    },
+    "agent-platform-model-registry": {
+      "source": "google/skills",
+      "sourceType": "github",
+      "skillPath": "skills/cloud/agent-platform-model-registry/SKILL.md",
+      "computedHash": "42aed32dd50592c0212ce29f1a2e0fd95d675f83fd20ba2ec65fafb405084fd9"
+    },
+    "agent-platform-skill-registry": {
+      "source": "google/skills",
+      "sourceType": "github",
+      "skillPath": "skills/cloud/agent-platform-skill-registry/SKILL.md",
+      "computedHash": "de229d00a9578fe54da917d4dc93547a3456333eda4b3e69b2231a2bb4a1ff76"
+    },
+    "agent-platform-tuning": {
+      "source": "google/skills",
+      "sourceType": "github",
+      "skillPath": "skills/cloud/agent-platform-tuning/SKILL.md",
+      "computedHash": "8d58d327c36dfa6002611977145c7f98c868dd80a2f5e22c71facf4e25ba758e"
+    },
+    "agent-platform-tuning-management": {
+      "source": "google/skills",
+      "sourceType": "github",
+      "skillPath": "skills/cloud/agent-platform-tuning-management/SKILL.md",
+      "computedHash": "0cf859127a60a6673dd3e541f297dcee9d391928c11aac3241a5cabf7520dfd9"
+    },
+    "cloud-run-basics": {
+      "source": "google/skills",
+      "sourceType": "github",
+      "skillPath": "skills/cloud/cloud-run-basics/SKILL.md",
+      "computedHash": "e51d5a27e6836c7bad5254a8e0289bd479d69eaa8c3518925260ea582bd94a2b"
+    },
+    "gcloud": {
+      "source": "google/skills",
+      "sourceType": "github",
+      "skillPath": "skills/cloud/gcloud/SKILL.md",
+      "computedHash": "a23b5fbdad5e91df27816a429b897ee1b7707e255ec985369ccd70b30b728e89"
+    }
+  }
+}
