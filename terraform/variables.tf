@@ -36,5 +36,5 @@ variable "budget_amount" {
 variable "enable_ai_agent" {
   type        = bool
   description = "Enable the AI agent feature (chatbot UI and endpoint)."
-  default     = true
+  default     = false
 }
