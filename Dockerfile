@@ -6,9 +6,10 @@ WORKDIR /app
 # Copy dependency files
 COPY package*.json ./
 COPY tsconfig*.json ./
+COPY frontend/package*.json ./frontend/
 
 # Install development dependencies
-RUN npm ci
+RUN npm ci && npm ci --prefix frontend
 
 # Copy source files
 COPY src/ ./src/
