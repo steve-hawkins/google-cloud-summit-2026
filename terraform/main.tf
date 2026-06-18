@@ -98,6 +98,25 @@ resource "google_cloud_run_v2_service" "app" {
       ports {
         container_port = 8080
       }
+
+      startup_probe {
+        initial_delay_seconds = 5
+        timeout_seconds       = 3
+        period_seconds        = 10
+        failure_threshold     = 6
+        http_get {
+          path = "/healthz"
+        }
+      }
+
+      liveness_probe {
+        timeout_seconds   = 3
+        period_seconds    = 30
+        failure_threshold = 3
+        http_get {
+          path = "/healthz"
+        }
+      }
     }
 
     scaling {
