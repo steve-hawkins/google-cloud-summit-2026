@@ -43,12 +43,12 @@ Operational Excellence focuses on running, monitoring, and continuously improvin
 *   **Deployment Automation**: A bootstrap orchestration script ([deploy-iac.sh](file:///workspaces/google-cloud-summit-2026/deploy-iac.sh)) handles API activation, Cloud Build image construction, and resource provisioning.
 *   **Continuous Integration (CI)**: A GitHub Actions workflow ([ci.yml](file:///workspaces/google-cloud-summit-2026/.github/workflows/ci.yml)) automates linting, building, and running tests.
 *   **Mocked Test Suite (RESOLVED)**: Unit and integration tests in [tests/agent.test.ts](file:///workspaces/google-cloud-summit-2026/tests/agent.test.ts) and [tests/carbonIntensity.test.ts](file:///workspaces/google-cloud-summit-2026/tests/carbonIntensity.test.ts) are fully mocked. Real network calls to the external National Grid and Google Vertex AI APIs are eliminated. This prevents CI pipeline timeouts, local credential leaks, and dependency on external service state.
-*   **Logging (Unstructured)**: The backend uses unstructured `console.log` and `console.warn` statements. This makes querying logs in Cloud Logging difficult and limits advanced log-based alerting.
-*   **Health Checks (None)**: There are no dedicated health check endpoints (e.g. `/healthz` or `/live`) configured in the Express app ([app.ts](file:///workspaces/google-cloud-summit-2026/src/app.ts)) for Cloud Run startup or liveness probes.
+*   **Health Checks (RESOLVED)**: A dedicated health check endpoint (`/healthz`) is configured in the Express app ([app.ts](file:///workspaces/google-cloud-summit-2026/src/app.ts)), returning a `200 OK` status and server timestamp.
+*   **Logging (Unstructured)**: The backend uses unstructured `console.log` and `console.warn` statements. This makes querying logs in Cloud Logging difficult and limits log-based alerting.
 
 ### Recommendations
 1.  **Structured JSON Logging**: Implement a library like `pino` or `winston` to output logs in JSON format matching Cloud Logging's schema.
-2.  **Liveness & Readiness Probes**: Add a `/healthz` endpoint verifying connection health and configure it in the Terraform Cloud Run service.
+2.  **Configure Container Probes**: Configure startup, liveness, and readiness probes in the Terraform Cloud Run service mapping to `/healthz`.
 
 ---
 
@@ -163,7 +163,7 @@ Below is a comparison of architectural choices made in the project:
 ### Phase 2: Medium Priority (Reliability & Performance)
 1.  **Implement In-Memory Cache** - *RESOLVED*: Implemented dynamic 15-minute caches for national, forecast, and regional postcode queries.
 2.  **Add Rate Limiter** - *RESOLVED*: Chat endpoints are rate-limited via `express-rate-limit`.
-3.  **Add Health Checks** - *OPEN*: Configure `/healthz` endpoints.
+3.  **Add Health Checks** - *RESOLVED*: Implemented a `/healthz` liveness/readiness endpoint.
 
 ### Phase 3: Long-Term (Enterprise Scaling)
 1.  **Deploy Static Assets to CDN** - *OPEN*: Host Vite static files on GCS/CDN to offload the Express container.
