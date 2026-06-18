@@ -29,3 +29,8 @@ Before implementing any feature or fixing any bug:
 - **Backend**: Node.js/TypeScript Express API located in `src/`. Endpoints in `src/app.ts`, services in `src/services/`.
 - **Frontend**: Vite SPA located in `frontend/`. Custom vanilla CSS in `frontend/src/style.css`.
 - **Infrastructure**: Terraform configurations located in `terraform/`.
+
+### 3. File Link Accessibility
+- Any file paths or clickable links presented in a conversation must point to files residing within the active workspace root (e.g. `/workspaces/google-cloud-summit-2026`).
+- Do not link directly to hidden system directories outside the workspace (like `/home/codespace/.gemini/` or `~/.gemini/`), as editors restrict access to them.
+- If an agent generates an artifact, log, or summary file in a hidden directory, it must copy that file to a location within the active workspace before presenting the clickable link to the user.
