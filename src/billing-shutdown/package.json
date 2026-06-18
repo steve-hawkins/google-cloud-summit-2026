@@ -1,0 +1,9 @@
+{
+  "name": "billing-shutdown",
+  "version": "1.0.0",
+  "description": "Programmatically disables billing when budget limits are exceeded",
+  "main": "index.js",
+  "dependencies": {
+    "googleapis": "^140.0.0"
+  }
+}
