@@ -247,3 +247,125 @@ schedulerForm.addEventListener('submit', async (e) => {
 
 // Initial Load
 fetchCurrentIntensity();
+
+// AI Chat Widget Elements
+const chatToggleBtn = document.getElementById('chat-toggle-btn') as HTMLButtonElement;
+const chatWindow = document.getElementById('chat-window') as HTMLDivElement;
+const chatCloseBtn = document.getElementById('chat-close-btn') as HTMLButtonElement;
+const chatMessages = document.getElementById('chat-messages') as HTMLDivElement;
+const chatInputForm = document.getElementById('chat-input-form') as HTMLFormElement;
+const chatInput = document.getElementById('chat-input') as HTMLInputElement;
+const chatSuggestions = document.getElementById('chat-suggestions') as HTMLDivElement;
+
+// Toggle Chat Window
+chatToggleBtn.addEventListener('click', () => {
+  chatWindow.classList.toggle('hidden');
+  if (!chatWindow.classList.contains('hidden')) {
+    chatInput.focus();
+    scrollToBottom();
+    // Hide pulse dot when user first opens the chat
+    const pulseDot = chatToggleBtn.querySelector('.chat-pulse-dot') as HTMLSpanElement;
+    if (pulseDot) pulseDot.style.display = 'none';
+  }
+});
+
+chatCloseBtn.addEventListener('click', () => {
+  chatWindow.classList.add('hidden');
+});
+
+// Helper to scroll messages to bottom
+function scrollToBottom() {
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Render message helper
+function appendMessage(text: string, sender: 'user' | 'agent' | 'system') {
+  const messageEl = document.createElement('div');
+  messageEl.className = `message message-${sender}`;
+  
+  // Convert basic markdown-like elements (e.g. **bold**, *italic*) to HTML
+  const formattedText = text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/\n/g, '<br/>');
+
+  messageEl.innerHTML = formattedText;
+  chatMessages.appendChild(messageEl);
+  scrollToBottom();
+}
+
+// Show/Hide typing indicator
+let typingIndicator: HTMLDivElement | null = null;
+function showTypingIndicator() {
+  if (typingIndicator) return;
+  typingIndicator = document.createElement('div');
+  typingIndicator.className = 'typing-indicator message-agent';
+  typingIndicator.innerHTML = `
+    <div class="typing-dot"></div>
+    <div class="typing-dot"></div>
+    <div class="typing-dot"></div>
+  `;
+  chatMessages.appendChild(typingIndicator);
+  scrollToBottom();
+}
+
+function hideTypingIndicator() {
+  if (typingIndicator) {
+    typingIndicator.remove();
+    typingIndicator = null;
+  }
+}
+
+// Handle chat query submit
+async function handleChatSubmit(text: string) {
+  const query = text.trim();
+  if (!query) return;
+
+  // Clear input
+  chatInput.value = '';
+
+  // Append user message
+  appendMessage(query, 'user');
+
+  // Show typing indicator
+  showTypingIndicator();
+
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ message: query })
+    });
+
+    if (!response.ok) {
+      throw new Error('Server returned an error');
+    }
+
+    const data = await response.json();
+    hideTypingIndicator();
+    appendMessage(data.response, 'agent');
+  } catch (error: any) {
+    hideTypingIndicator();
+    appendMessage('Sorry, I encountered an issue connecting to the EcoPulse AI service. Please try again later.', 'system');
+    console.error('Chat error:', error);
+  }
+}
+
+// Submit via Form
+chatInputForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const text = chatInput.value;
+  handleChatSubmit(text);
+});
+
+// Handle suggestions
+chatSuggestions.addEventListener('click', (e) => {
+  const button = (e.target as HTMLElement).closest('.suggestion-chip') as HTMLButtonElement;
+  if (button) {
+    const text = button.textContent || '';
+    handleChatSubmit(text);
+  }
+});
+

@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { CarbonIntensityService } from './services/carbonIntensity.js';
 import { SchedulerService } from './services/scheduler.js';
+import { AgentService } from './services/agent.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,6 +12,7 @@ export function createApp() {
   const app = express();
   const intensityService = new CarbonIntensityService();
   const schedulerService = new SchedulerService();
+  const agentService = new AgentService();
 
   app.use(express.json());
   
@@ -53,6 +55,21 @@ export function createApp() {
       return res.json(optimalSchedule);
     } catch (error: any) {
       return res.status(400).json({ error: error.message || 'Failed to calculate optimal schedule' });
+    }
+  });
+
+  app.post('/api/chat', async (req, res) => {
+    const { message } = req.body;
+
+    if (!message || typeof message !== 'string') {
+      return res.status(400).json({ error: 'Missing message in request body' });
+    }
+
+    try {
+      const reply = await agentService.query(message);
+      return res.json({ response: reply });
+    } catch (error: any) {
+      return res.status(500).json({ error: error.message || 'Agent query failed' });
     }
   });
 
