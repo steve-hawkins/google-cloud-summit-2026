@@ -9,8 +9,8 @@ export class AgentService {
 
   constructor() {
     this.genAI = new GoogleGenAI({
-      project: 'inlaid-fuze-499810-f7',
-      location: 'us-central1',
+      project: process.env.GCP_PROJECT || 'inlaid-fuze-499810-f7',
+      location: process.env.GCP_REGION || 'us-central1',
       vertexai: true
     });
   }

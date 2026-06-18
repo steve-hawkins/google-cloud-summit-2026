@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { rateLimit } from 'express-rate-limit';
 import { CarbonIntensityService } from './services/carbonIntensity.js';
 import { SchedulerService } from './services/scheduler.js';
 import { AgentService } from './services/agent.js';
@@ -13,6 +14,14 @@ export function createApp() {
   const intensityService = new CarbonIntensityService();
   const schedulerService = new SchedulerService();
   const agentService = new AgentService();
+
+  const chatLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute window
+    limit: process.env.NODE_ENV === 'test' ? 3 : 30, // 3 requests in tests, 30 requests in production
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+    message: { error: 'Too many requests, please try again later.' }
+  });
 
   app.use(express.json());
   
@@ -58,7 +67,7 @@ export function createApp() {
     }
   });
 
-  app.post('/api/chat', async (req, res) => {
+  app.post('/api/chat', chatLimiter, async (req, res) => {
     const { message } = req.body;
 
     if (!message || typeof message !== 'string') {
