@@ -7,9 +7,10 @@ interface FuelMix {
 }
 
 interface IntensityResponse {
-  from: string;
-  to: string;
-  forecast: number;
+  from?: string;
+  to?: string;
+  forecast?: number;
+  intensity?: number;
   actual?: number | null;
   index: string;
   postcode?: string;
@@ -90,7 +91,7 @@ durationRange.addEventListener('input', () => {
 // Update Intensity UI
 function updateIntensityUI(data: IntensityResponse) {
   // Update values
-  intensityValue.textContent = data.forecast.toString();
+  intensityValue.textContent = (data.forecast ?? data.intensity ?? 0).toString();
   regionBadge.textContent = data.region || 'National Grid';
 
   // Normalise index names
