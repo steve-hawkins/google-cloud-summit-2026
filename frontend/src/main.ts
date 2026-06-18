@@ -370,3 +370,20 @@ chatSuggestions.addEventListener('click', (e) => {
   }
 });
 
+// Load configuration on initialization and hide the chat widget if the AI agent is disabled
+async function initializeConfig() {
+  try {
+    const response = await fetch('/api/config');
+    if (response.ok) {
+      const config = await response.json();
+      if (config.enableAiAgent === false) {
+        if (chatToggleBtn) chatToggleBtn.style.display = 'none';
+        if (chatWindow) chatWindow.classList.add('hidden');
+      }
+    }
+  } catch (error) {
+    console.error('Failed to load application configuration:', error);
+  }
+}
+initializeConfig();
+

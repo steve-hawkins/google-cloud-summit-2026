@@ -32,3 +32,9 @@ variable "budget_amount" {
   description = "The target monthly budget amount in USD."
   default     = 10
 }
+
+variable "enable_ai_agent" {
+  type        = bool
+  description = "Enable the AI agent feature (chatbot UI and endpoint)."
+  default     = true
+}

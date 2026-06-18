@@ -68,6 +68,10 @@ export function createApp() {
   });
 
   app.post('/api/chat', chatLimiter, async (req, res) => {
+    if (process.env.ENABLE_AI_AGENT === 'false') {
+      return res.status(503).json({ error: 'AI agent is disabled' });
+    }
+
     const { message } = req.body;
 
     if (!message || typeof message !== 'string') {
@@ -80,6 +84,12 @@ export function createApp() {
     } catch (error: any) {
       return res.status(500).json({ error: error.message || 'Agent query failed' });
     }
+  });
+
+  app.get('/api/config', (req, res) => {
+    return res.json({
+      enableAiAgent: process.env.ENABLE_AI_AGENT !== 'false'
+    });
   });
 
   app.get('/healthz', (req, res) => {

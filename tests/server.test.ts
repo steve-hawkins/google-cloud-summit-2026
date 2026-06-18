@@ -123,4 +123,28 @@ describe('Express API Server', () => {
     expect(response.body).toHaveProperty('status', 'OK');
     expect(response.body).toHaveProperty('timestamp');
   });
+
+  describe('Feature Flag /api/config', () => {
+    it('GET /api/config returns enableAiAgent true by default', async () => {
+      const response = await request(app)
+        .get('/api/config')
+        .expect(200);
+
+      expect(response.body).toEqual({ enableAiAgent: true });
+    });
+
+    it('POST /api/chat returns 503 if ENABLE_AI_AGENT is set to false', async () => {
+      process.env.ENABLE_AI_AGENT = 'false';
+
+      const response = await request(app)
+        .post('/api/chat')
+        .send({ message: 'Hello' })
+        .expect(503);
+
+      expect(response.body).toHaveProperty('error', 'AI agent is disabled');
+
+      // Reset environment variable for subsequent tests
+      delete process.env.ENABLE_AI_AGENT;
+    });
+  });
 });

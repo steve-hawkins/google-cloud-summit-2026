@@ -95,6 +95,11 @@ resource "google_cloud_run_v2_service" "app" {
         value = var.region
       }
 
+      env {
+        name  = "ENABLE_AI_AGENT"
+        value = tostring(var.enable_ai_agent)
+      }
+
       ports {
         container_port = 8080
       }
