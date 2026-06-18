@@ -114,4 +114,13 @@ describe('Express API Server', () => {
       .get('/api/scheduler/optimize?durationHours=abc')
       .expect(400);
   });
+
+  it('GET /healthz returns 200 OK status', async () => {
+    const response = await request(app)
+      .get('/healthz')
+      .expect(200);
+
+    expect(response.body).toHaveProperty('status', 'OK');
+    expect(response.body).toHaveProperty('timestamp');
+  });
 });

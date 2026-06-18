@@ -82,5 +82,9 @@ export function createApp() {
     }
   });
 
+  app.get('/healthz', (req, res) => {
+    return res.json({ status: 'OK', timestamp: new Date().toISOString() });
+  });
+
   return app;
 }
